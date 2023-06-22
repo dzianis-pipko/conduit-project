@@ -5,19 +5,19 @@ import {Container} from '../container/container.component';
 
 export const Header: React.FC = () => {
   const navLinkClasses = ({isActive}: {isActive: boolean}) =>
-    clsx('py-navItem', {
+    clsx('py-navItem hover:text-black/60 hover:no-underline', {
       'text-black/30': !isActive,
       'text-black/80': isActive,
     });
 
   return (
     <header>
-      <nav className="px-2 py-4">
+      <nav className="py-2 px-4">
         <Container>
           <div className="flex justify-between items-center">
             <Link
               to={'/'}
-              className="font-titillium text-2xl mr-8 text-conduit-green">
+              className="font-titillium text-2xl mr-8 text-conduit-green hover:no-underline hover:text-conduit-green">
               conduit
             </Link>
 
