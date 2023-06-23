@@ -1,13 +1,27 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Container} from '../../../../common/components';
 import {ArticleList} from '../article-list/article-list.component';
 import {FeedToggle} from '../feed-toggle/feed-toggle.component';
 import {useGetGlobalFeedQuery} from '../../api/repository';
+import ReactPaginate from 'react-paginate';
+import {FEED_PAGE_SIZE} from '../../consts';
+import {useSearchParams} from 'react-router-dom';
+import {serializeSearchParams} from '../../../../utils/router';
 
 export const Feed: React.FC = () => {
-  const {data, error, isLoading} = useGetGlobalFeedQuery('');
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  if (isLoading) {
+  const [page, setPage] = useState(
+    searchParams.get('page') ? Number(searchParams.get('page')) : 0,
+  );
+  const handlePageChange = ({selected}: {selected: number}) => {
+    setPage(selected);
+    setSearchParams(serializeSearchParams({page: String(selected)}));
+  };
+
+  const {data, error, isLoading, isFetching} = useGetGlobalFeedQuery({page});
+
+  if (isLoading || isFetching) {
     return <Container>Feed Loading...</Container>;
   }
 
@@ -19,7 +33,24 @@ export const Feed: React.FC = () => {
     <Container>
       <FeedToggle />
       <div className="flex">
-        <ArticleList list={data?.articles || []} />
+        <div className="w-3/4">
+          <ArticleList list={data?.articles || []} />
+          <nav className="my-6">
+            <ReactPaginate
+              pageCount={(data?.articlesCount || 0) / FEED_PAGE_SIZE}
+              pageRangeDisplayed={(data?.articlesCount || 0) / FEED_PAGE_SIZE}
+              previousLabel={null}
+              nextLabel={null}
+              containerClassName="flex my-4"
+              pageClassName="group"
+              pageLinkClassName="px-3 py-2 text-conduit-green bg-white border border-conduit-lightenGray -ml-px group-[&:nth-child(2)]:rounded-l group-[&:nth-last-child(2)]:rounded-r hover:bg-conduit-pageHoverBg"
+              activeClassName="active group"
+              activeLinkClassName="group-[.active]:bg-conduit-green group-[.active]:text-white group-[.active]:border-conduit-green"
+              onPageChange={handlePageChange}
+              forcePage={page}
+            />
+          </nav>
+        </div>
         <div className="w-1/4">Tags</div>
       </div>
     </Container>

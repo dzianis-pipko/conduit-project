@@ -19,6 +19,7 @@ module.exports = {
           darkestGray: '#373a3c',
           tag: '#aaa',
           darkenGray: '#999',
+          pageHoverBg: '#eceeef',
         },
       },
       spacing: {
