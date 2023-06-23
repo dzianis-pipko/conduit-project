@@ -1,20 +1,19 @@
 import React from 'react';
 
-export const TagList: React.FC = () => {
+interface TagListProps {
+  list: string[];
+}
+
+export const TagList: React.FC<TagListProps> = ({list}) => {
   return (
     <ul className="flex mb-4">
-      <li className="font-light text-date border border-conduit-lightenGray text-conduit-tag mr-1 mb-0.2 px-tag rounded-tag">
-        voluptate
-      </li>
-      <li className="font-light text-date border border-conduit-lightenGray text-conduit-tag mr-1 mb-0.2 px-tag rounded-tag">
-        rerum
-      </li>
-      <li className="font-light text-date border border-conduit-lightenGray text-conduit-tag mr-1 mb-0.2 px-tag rounded-tag">
-        ducimus
-      </li>
-      <li className="font-light text-date border border-conduit-lightenGray text-conduit-tag mr-1 mb-0.2 px-tag rounded-tag">
-        hic
-      </li>
+      {list.map(tag => (
+        <li
+          key={tag}
+          className="font-light text-date border border-conduit-lightenGray text-conduit-tag mr-1 mb-0.2 px-tag rounded-tag">
+          {tag}
+        </li>
+      ))}
     </ul>
   );
 };
