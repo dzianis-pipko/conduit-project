@@ -7,6 +7,7 @@ import ReactPaginate from 'react-paginate';
 import {FEED_PAGE_SIZE} from '../../consts';
 import {useSearchParams} from 'react-router-dom';
 import {serializeSearchParams} from '../../../../utils/router';
+import {TagCloud} from '../tag-cloud/tag-cloud.component';
 
 export const Feed: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -19,7 +20,10 @@ export const Feed: React.FC = () => {
     setSearchParams(serializeSearchParams({page: String(selected)}));
   };
 
-  const {data, error, isLoading, isFetching} = useGetGlobalFeedQuery({page});
+  const {data, error, isLoading, isFetching} = useGetGlobalFeedQuery({
+    page,
+    tag: searchParams.get('tag'),
+  });
 
   if (isLoading || isFetching) {
     return <Container>Feed Loading...</Container>;
@@ -51,7 +55,9 @@ export const Feed: React.FC = () => {
             />
           </nav>
         </div>
-        <div className="w-1/4">Tags</div>
+        <div className="w-1/4 pl-3">
+          <TagCloud />
+        </div>
       </div>
     </Container>
   );
